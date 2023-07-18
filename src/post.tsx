@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 type face = {
   grid: number[][];
@@ -19,18 +19,14 @@ export const Post = ({ grid, setGrid, postBody, setPostBody }: face) => {
         });
   };
 
-  useEffect(() => {
-    console.log(postBody)
-  }, [postBody])
-
-  const cleanup = function () {
+  const cleanup = useCallback(() => {
     for (const value in postBody) {
       if (postBody[value] === "") {
         delete postBody[value];
       }
     }
     setPostBody(postBody);
-  };
+  }, [postBody, setPostBody]);
 
   const deletion = () => {
     grid.pop();
@@ -43,7 +39,8 @@ export const Post = ({ grid, setGrid, postBody, setPostBody }: face) => {
 
   useEffect(() => {
     cleanup();
-  }, [postBody]);
+    console.log(postBody)
+  }, [postBody, cleanup])
 
   return (
     <div className="json-tree">
